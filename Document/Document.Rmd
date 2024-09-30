@@ -94,7 +94,7 @@ df$log_avg_VeDBA=log(df$AVG_VeDBA)
 
 #Concatenate Times
 df$DateTime = paste(df$Date, df$Time)
-df$dt = dmy_hms(df$DateTime, tz="GMT")
+df$dt = mdy_hms(df$DateTime, tz="GMT")
 
 plot(df$dt, df$AVG_VeDBA)
 
@@ -108,11 +108,11 @@ calculate_rolling_median <- function(column, window_size = 200) {
 }
 
 df=df%>%
-  mutate(median_VeDBA=calculate_rolling_median(log_avg_VeDBA))
+  mutate(median_log_VeDBA=calculate_rolling_median(log_avg_VeDBA))
 
-#plot(df$dt, df$median_VeDBA)
+#plot(df$dt, df$median_log_VeDBA)
 
-#Calculate rolling median of the avg VeDBA for 6 minute window
+#Calculate rolling median of the avg VeDBA for 10 minute window
 df=df%>%
   mutate(median_VeDBA=calculate_rolling_median(AVG_VeDBA))
 
@@ -122,5 +122,5 @@ df=df%>%
 ```{r VeDBA visualization}
 library(ggplot2)
 library(dplyr)
-ggplot(data=df, aes(x=DateTime, y=median_VeDBA)) + geom_line()
+ggplot(data=df, aes(x=dt, y=median_VeDBA)) + geom_line()
 ```
